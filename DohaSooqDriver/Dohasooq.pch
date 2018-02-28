@@ -1,0 +1,30 @@
+//
+//  Dohasooq.pch
+//  DohaSooqDriver
+//
+//  Created by Test User on 12/07/17.
+//  Copyright © 2017 Test User. All rights reserved.
+//s
+
+#ifndef Dohasooq_pch
+#define Dohasooq_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#define emailRegEx @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,10}"
+#define passwordRegEX @"^[a-zA-Z0-9]{8,}$"
+
+//Local Server
+//#define SERVER_URL @"http://192.168.2.111/dohasooq/apis/"
+//#define SERVER_IMG @"http://192.168.2.111/dohasooq/"
+
+//Staging server
+#define SERVER_URL @"http://dohasooq.carmatec.com/apis/"
+#define SERVER_IMG @"http://dohasooq.carmatec.com/"
+
+//Staging new
+//#define SERVER_URL @"http://test2.dohasooq.com/apis/"
+//#define SERVER_IMG @"http://test2.dohasooq.com/"
+
+//http://test2.dohasooq.com
+#endif /* Dohasooq_pch */
