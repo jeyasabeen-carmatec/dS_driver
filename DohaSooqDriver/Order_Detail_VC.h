@@ -34,14 +34,15 @@
 @property (nonatomic,retain)IBOutlet UILabel *assigned_DATE;
 @property (nonatomic,retain)IBOutlet UILabel *delivery_DATE;
 @property (nonatomic,retain)IBOutlet UILabel *lbl_del_slot;
+
 #pragma customer view labels
 @property (nonatomic,retain) IBOutlet UILabel *customer_name;
 @property(nonatomic,retain) IBOutlet UILabel *customer_phone;
 @property (nonatomic,retain)IBOutlet UILabel *customer_address;
+
 #pragma payment method 
 @property (nonatomic,retain) IBOutlet UIImageView *LBL_stat;
 @property (nonatomic,retain) IBOutlet UIButton *BTN_stat;
-
 @property (nonatomic,retain) IBOutlet UILabel *LBL_subtotal;
 @property (nonatomic,retain) IBOutlet UILabel *LBL_shippingcharge;
 @property (nonatomic,retain) IBOutlet UILabel *LBL_total;

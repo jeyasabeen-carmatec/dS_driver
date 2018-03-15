@@ -214,7 +214,7 @@
         NSLog(@"Api response from forgotPwdApi %@",json_DATA);
         
         @try {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[[json_DATA valueForKey:@"status"] capitalizedString] message:[[json_DATA valueForKey:@"msg"] capitalizedString] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil]; //If there is an account associated with %@, you will receive an email with new reset password link
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"]  delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil]; //If there is an account associated with %@, you will receive an email with new reset password link
             [alert show];
         } @catch (NSException *exception) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];

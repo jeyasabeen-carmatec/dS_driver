@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73C56FE6205937BD003A1887 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 73C56FE5205937BD003A1887 /* Main.storyboard */; };
+		73C56FE820593804003A1887 /* order_list_cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73C56FE720593804003A1887 /* order_list_cell.xib */; };
+		73C56FEA205939DC003A1887 /* IMG_barBTN1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73C56FE9205939DC003A1887 /* IMG_barBTN1.png */; };
+		73C56FEC20593A74003A1887 /* upload1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73C56FEB20593A74003A1887 /* upload1.png */; };
 		73E7ED4420077EBC00650C02 /* DGActivityIndicatorBallPulseAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 73E7ED3B20077EBC00650C02 /* DGActivityIndicatorBallPulseAnimation.m */; };
 		73E7ED4520077EBC00650C02 /* DGActivityIndicatorBallSpinFadeLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 73E7ED3D20077EBC00650C02 /* DGActivityIndicatorBallSpinFadeLoader.m */; };
 		73E7ED4620077EBC00650C02 /* DGActivityIndicatorTriplePulseAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 73E7ED3F20077EBC00650C02 /* DGActivityIndicatorTriplePulseAnimation.m */; };
@@ -45,7 +49,6 @@
 		BE1377C71F20B530003FA8EC /* Intial_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1377C61F20B530003FA8EC /* Intial_vc.m */; };
 		BE1377D01F20B55A003FA8EC /* Order_List_VC.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1377CC1F20B55A003FA8EC /* Order_List_VC.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BE1377D11F20B55A003FA8EC /* order_list_cell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1377CE1F20B55A003FA8EC /* order_list_cell.m */; };
-		BE1377D21F20B55A003FA8EC /* order_list_cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE1377CF1F20B55A003FA8EC /* order_list_cell.xib */; };
 		BE1377D61F20B581003FA8EC /* Order_filter_VC.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1377D51F20B581003FA8EC /* Order_filter_VC.m */; };
 		BE1377DB1F20B5A5003FA8EC /* Oreder_detail_VC.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1377DA1F20B5A5003FA8EC /* Oreder_detail_VC.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BE1377E21F20B5DC003FA8EC /* update_profile_VC.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1377DE1F20B5DC003FA8EC /* update_profile_VC.m */; };
@@ -72,7 +75,6 @@
 		BE13781A1F20B6B6003FA8EC /* RobotoCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE1378141F20B6B6003FA8EC /* RobotoCondensed-Regular.ttf */; };
 		BE13781B1F20B6B6003FA8EC /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = BE1378151F20B6B6003FA8EC /* FontAwesome.otf */; };
 		BE13781C1F20B6B6003FA8EC /* Roboto-Light_1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE1378161F20B6B6003FA8EC /* Roboto-Light_1.ttf */; };
-		BE1378251F20BB41003FA8EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE1378241F20BB41003FA8EC /* Main.storyboard */; };
 		BE1378281F20BB49003FA8EC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1378271F20BB49003FA8EC /* ViewController.m */; };
 		BE1378321F20BC75003FA8EC /* Car.png in Resources */ = {isa = PBXBuildFile; fileRef = BE1378291F20BC75003FA8EC /* Car.png */; };
 		BE1378331F20BC75003FA8EC /* Edit.png in Resources */ = {isa = PBXBuildFile; fileRef = BE13782A1F20BC75003FA8EC /* Edit.png */; };
@@ -102,6 +104,10 @@
 		116F34AB8A09D3BE42526596 /* libPods-DohaSooqDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DohaSooqDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BA6EE27DC3E8B0F04F628D8 /* Pods-DohaSooqDriver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DohaSooqDriver.release.xcconfig"; path = "Pods/Target Support Files/Pods-DohaSooqDriver/Pods-DohaSooqDriver.release.xcconfig"; sourceTree = "<group>"; };
 		4E2D8D498AC2540E9ED6472A /* Pods-DohaSooqDriver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DohaSooqDriver.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DohaSooqDriver/Pods-DohaSooqDriver.debug.xcconfig"; sourceTree = "<group>"; };
+		73C56FE5205937BD003A1887 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		73C56FE720593804003A1887 /* order_list_cell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = order_list_cell.xib; sourceTree = "<group>"; };
+		73C56FE9205939DC003A1887 /* IMG_barBTN1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_barBTN1.png; sourceTree = "<group>"; };
+		73C56FEB20593A74003A1887 /* upload1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload1.png; sourceTree = "<group>"; };
 		73E7ED3A20077EBC00650C02 /* DGActivityIndicatorBallPulseAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGActivityIndicatorBallPulseAnimation.h; sourceTree = "<group>"; };
 		73E7ED3B20077EBC00650C02 /* DGActivityIndicatorBallPulseAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGActivityIndicatorBallPulseAnimation.m; sourceTree = "<group>"; };
 		73E7ED3C20077EBC00650C02 /* DGActivityIndicatorBallSpinFadeLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGActivityIndicatorBallSpinFadeLoader.h; sourceTree = "<group>"; };
@@ -161,7 +167,6 @@
 		BE1377CC1F20B55A003FA8EC /* Order_List_VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order_List_VC.m; sourceTree = "<group>"; };
 		BE1377CD1F20B55A003FA8EC /* order_list_cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = order_list_cell.h; sourceTree = "<group>"; };
 		BE1377CE1F20B55A003FA8EC /* order_list_cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = order_list_cell.m; sourceTree = "<group>"; };
-		BE1377CF1F20B55A003FA8EC /* order_list_cell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = order_list_cell.xib; sourceTree = "<group>"; };
 		BE1377D41F20B581003FA8EC /* Order_filter_VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order_filter_VC.h; sourceTree = "<group>"; };
 		BE1377D51F20B581003FA8EC /* Order_filter_VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order_filter_VC.m; sourceTree = "<group>"; };
 		BE1377D91F20B5A5003FA8EC /* Oreder_detail_VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Oreder_detail_VC.h; sourceTree = "<group>"; };
@@ -199,7 +204,6 @@
 		BE1378151F20B6B6003FA8EC /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
 		BE1378161F20B6B6003FA8EC /* Roboto-Light_1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light_1.ttf"; sourceTree = "<group>"; };
 		BE13781D1F20B7B1003FA8EC /* Dohasooq.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dohasooq.pch; sourceTree = "<group>"; };
-		BE1378241F20BB41003FA8EC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		BE1378261F20BB49003FA8EC /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		BE1378271F20BB49003FA8EC /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		BE1378291F20BC75003FA8EC /* Car.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Car.png; sourceTree = "<group>"; };
@@ -376,9 +380,9 @@
 			children = (
 				BE1377CB1F20B55A003FA8EC /* Order_List_VC.h */,
 				BE1377CC1F20B55A003FA8EC /* Order_List_VC.m */,
+				73C56FE720593804003A1887 /* order_list_cell.xib */,
 				BE1377CD1F20B55A003FA8EC /* order_list_cell.h */,
 				BE1377CE1F20B55A003FA8EC /* order_list_cell.m */,
-				BE1377CF1F20B55A003FA8EC /* order_list_cell.xib */,
 				BE6855471F270FC9000DC554 /* Order_Detail_VC.h */,
 				BE6855481F270FC9000DC554 /* Order_Detail_VC.m */,
 				73E7EDA2200CBC7400650C02 /* Order_detail */,
@@ -472,6 +476,8 @@
 				BE1378301F20BC75003FA8EC /* Profile-Pic.png */,
 				BE1378311F20BC75003FA8EC /* Save.png */,
 				BE8E37851F2B052D00ACF147 /* Phoneimage.png */,
+				73C56FEB20593A74003A1887 /* upload1.png */,
+				73C56FE9205939DC003A1887 /* IMG_barBTN1.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -550,7 +556,7 @@
 				BE1377C61F20B530003FA8EC /* Intial_vc.m */,
 				BE1378261F20BB49003FA8EC /* ViewController.h */,
 				BE1378271F20BB49003FA8EC /* ViewController.m */,
-				BE1378241F20BB41003FA8EC /* Main.storyboard */,
+				73C56FE5205937BD003A1887 /* Main.storyboard */,
 				BE1377CA1F20B54B003FA8EC /* Order_LIST */,
 				BE1377D81F20B597003FA8EC /* Googlemaps */,
 				BE1377D31F20B569003FA8EC /* Order_Filter */,
@@ -646,9 +652,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				73E7ED9A200C9D6F00650C02 /* loader3.png in Resources */,
-				BE1378251F20BB41003FA8EC /* Main.storyboard in Resources */,
 				BE13781C1F20B6B6003FA8EC /* Roboto-Light_1.ttf in Resources */,
 				BE1378351F20BC75003FA8EC /* Lock.png in Resources */,
+				73C56FE820593804003A1887 /* order_list_cell.xib in Resources */,
 				BE1378031F20B67C003FA8EC /* Email.png in Resources */,
 				BE1378381F20BC75003FA8EC /* PhotoEdit.png in Resources */,
 				73E7ED9C200C9D6F00650C02 /* loader5.png in Resources */,
@@ -656,6 +662,7 @@
 				73E7ED97200C9D6F00650C02 /* loader17.png in Resources */,
 				73E7ED98200C9D6F00650C02 /* loader18.png in Resources */,
 				BE1378171F20B6B6003FA8EC /* Roboto-Medium_1.ttf in Resources */,
+				73C56FEC20593A74003A1887 /* upload1.png in Resources */,
 				BE45F1C11F28AB6100E865AF /* uncheked_order.png in Resources */,
 				BE1378331F20BC75003FA8EC /* Edit.png in Resources */,
 				BE1378011F20B67C003FA8EC /* Change-Password-copy.png in Resources */,
@@ -664,6 +671,7 @@
 				BE8E37861F2B052E00ACF147 /* Phoneimage.png in Resources */,
 				BE1377E41F20B5DC003FA8EC /* update_profile_cell.xib in Resources */,
 				73E7EDA0200C9D6F00650C02 /* loader9.png in Resources */,
+				73C56FE6205937BD003A1887 /* Main.storyboard in Resources */,
 				BE13781B1F20B6B6003FA8EC /* FontAwesome.otf in Resources */,
 				73E7ED90200C9D6F00650C02 /* loader10.png in Resources */,
 				73E7ED94200C9D6F00650C02 /* loader14.png in Resources */,
@@ -676,6 +684,7 @@
 				73E7ED9D200C9D6F00650C02 /* loader6.png in Resources */,
 				73E7ED9E200C9D6F00650C02 /* loader7.png in Resources */,
 				BE1378361F20BC75003FA8EC /* Name-plate.png in Resources */,
+				73C56FEA205939DC003A1887 /* IMG_barBTN1.png in Resources */,
 				73E7ED92200C9D6F00650C02 /* loader12.png in Resources */,
 				BE13783E1F21B386003FA8EC /* LaunchScreen.storyboard in Resources */,
 				BE13781A1F20B6B6003FA8EC /* RobotoCondensed-Regular.ttf in Resources */,
@@ -693,7 +702,6 @@
 				BE1378321F20BC75003FA8EC /* Car.png in Resources */,
 				73E7EDA7200CBEB500650C02 /* Cell_order_items.xib in Resources */,
 				BE45F1C21F28AB6100E865AF /* checked_order.png in Resources */,
-				BE1377D21F20B55A003FA8EC /* order_list_cell.xib in Resources */,
 				BE1378081F20B67C003FA8EC /* profile_pic.png in Resources */,
 				BEB07F331F20B3580092D116 /* Assets.xcassets in Resources */,
 				73E7EDA1200C9D6F00650C02 /* Loader-2.gif in Resources */,
@@ -904,7 +912,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DohaSooqDriver/DohaSooqDriver.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 4MCGAH3G26;
 				GCC_PREFIX_HEADER = DohaSooqDriver/Dohasooq.pch;
 				INFOPLIST_FILE = DohaSooqDriver/Info.plist;
@@ -912,8 +920,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.carmatec.DhohaSooqDriver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fa18f432-4843-4478-869b-4e72a01fa30e";
-				PROVISIONING_PROFILE_SPECIFIER = DEV_DRIVER;
+				PROVISIONING_PROFILE = "99733839-9f53-409e-bcfa-cfdb680201cb";
+				PROVISIONING_PROFILE_SPECIFIER = DS_DRIVER_adhoc;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)/SharedPrecompiledHeaders";
 			};
 			name = Debug;
@@ -924,7 +932,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DohaSooqDriver/DohaSooqDriver.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 4MCGAH3G26;
 				GCC_PREFIX_HEADER = DohaSooqDriver/Dohasooq.pch;
 				INFOPLIST_FILE = DohaSooqDriver/Info.plist;
@@ -932,8 +940,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.carmatec.DhohaSooqDriver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fa18f432-4843-4478-869b-4e72a01fa30e";
-				PROVISIONING_PROFILE_SPECIFIER = DEV_DRIVER;
+				PROVISIONING_PROFILE = "99733839-9f53-409e-bcfa-cfdb680201cb";
+				PROVISIONING_PROFILE_SPECIFIER = DS_DRIVER_adhoc;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)/SharedPrecompiledHeaders";
 			};
 			name = Release;

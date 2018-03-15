@@ -19,12 +19,16 @@
 //#define SERVER_IMG @"http://192.168.2.111/dohasooq/"
 
 //Staging server
-#define SERVER_URL @"http://dohasooq.carmatec.com/apis/"
-#define SERVER_IMG @"http://dohasooq.carmatec.com/"
+//#define SERVER_URL @"http://dohasooq.carmatec.com/apis/"
+//#define SERVER_IMG @"http://dohasooq.carmatec.com/"
 
 //Staging new
-//#define SERVER_URL @"http://test2.dohasooq.com/apis/"
-//#define SERVER_IMG @"http://test2.dohasooq.com/"
+#define SERVER_URL @"http://test2.dohasooq.com/apis/"
+#define SERVER_IMG @"http://test2.dohasooq.com/"
+
+//Pilot server
+//#define SERVER_URL @"https://pilot.dohasooq.com/apis/"
+//#define SERVER_IMG @"https://pilot.dohasooq.com/"
 
 //http://test2.dohasooq.com
 #endif /* Dohasooq_pch */

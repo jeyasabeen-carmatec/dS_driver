@@ -174,7 +174,13 @@
     
     order_frame = _customer_VW.frame;
     order_frame.origin.x = 10;
-    order_frame.origin.y = _order_VW.frame.size.height + _order_VW.frame.origin.y;
+    if (_lbl_del_slot.hidden == YES) {
+        order_frame.origin.y = _order_VW.frame.size.height + _order_VW.frame.origin.y - 33;
+    }
+    else
+    {
+        order_frame.origin.y = _order_VW.frame.size.height + _order_VW.frame.origin.y;
+    }
     order_frame.size.width = self.view.frame.size.width - 20;
     order_frame.size.height = _customer_phone.frame.origin.y + _customer_phone.frame.size.height + 10;
     _customer_VW.frame = order_frame;
@@ -472,25 +478,31 @@
         STR_delivery_slot = @"Not Mentioned";
     }
     
-    STR_print_delivery = [NSString stringWithFormat:@"Delivery Slot : %@",STR_delivery_slot];
-    
-    if ([_lbl_del_slot respondsToSelector:@selector(setAttributedText:)]) {
-        
-        // Define general attributes for the entire text
-        NSDictionary *attribsd = @{
-                                   NSForegroundColorAttributeName:_assigned_DATE.textColor,
-                                   NSFontAttributeName: _assigned_DATE.font
-                                   };
-        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:STR_print_delivery attributes:attribsd];
-        
-        // UIFont *unboldFont = [UIFont fontWithName:@"Roboto-Medium" size:14];
-        NSRange greenTextRange = [STR_print_delivery rangeOfString:STR_delivery_slot];
-        [attributedText setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:0.00 green:0.33 blue:0.62 alpha:1.0],NSFontAttributeName:_assigned_DATE.font}range:greenTextRange];
-        _lbl_del_slot.attributedText = attributedText;
+    if ([STR_delivery_slot isEqualToString:@"No Delivery slot Choosen"])
+    {
+        _lbl_del_slot.hidden = YES;
     }
     else
     {
-        _lbl_del_slot.text = STR_print_delivery;
+        STR_print_delivery = [NSString stringWithFormat:@"Delivery Slot : %@",STR_delivery_slot];
+        if ([_lbl_del_slot respondsToSelector:@selector(setAttributedText:)]) {
+            
+            // Define general attributes for the entire text
+            NSDictionary *attribsd = @{
+                                       NSForegroundColorAttributeName:_assigned_DATE.textColor,
+                                       NSFontAttributeName: _assigned_DATE.font
+                                       };
+            NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:STR_print_delivery attributes:attribsd];
+            
+            // UIFont *unboldFont = [UIFont fontWithName:@"Roboto-Medium" size:14];
+            NSRange greenTextRange = [STR_print_delivery rangeOfString:STR_delivery_slot];
+            [attributedText setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:0.00 green:0.33 blue:0.62 alpha:1.0],NSFontAttributeName:_assigned_DATE.font}range:greenTextRange];
+            _lbl_del_slot.attributedText = attributedText;
+        }
+        else
+        {
+            _lbl_del_slot.text = STR_print_delivery;
+        }
     }
     
     
@@ -1238,7 +1250,7 @@
                 
                 
                 
-                NSString *total_orders_text = @"TOTAL ORDERS : ";
+                NSString *total_orders_text = @"TOTAL ITEMS : ";
                 NSString *order_quantity = [NSString stringWithFormat:@"%i",QTY_VAL];
                 NSString *total_orders = [NSString stringWithFormat:@"%@%@",total_orders_text,order_quantity];
                 if ([_total_orders respondsToSelector:@selector(setAttributedText:)]) {
@@ -1556,10 +1568,10 @@
 //    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     
-    //    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     //    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"order_id\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     //    [body appendData:[[NSString stringWithFormat:@"%@",STR_orderid] dataUsingEncoding:NSASCIIStringEncoding]];
-    //    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     
     // set request body
     NSError *error;
