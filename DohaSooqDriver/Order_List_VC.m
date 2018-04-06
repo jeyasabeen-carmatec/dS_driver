@@ -97,8 +97,11 @@
        } forState:UIControlStateNormal];
     
 //
+//    UIImageView *IMG_btn = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 25)];
+//    IMG_btn.image = [UIImage imageNamed:@"TOp_logo"];
     UIButton *BTN_refresh = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 25)];
-    [BTN_refresh setImage:[UIImage imageNamed:@"TOp_logo"] forState:UIControlStateNormal];
+    [BTN_refresh setImage:[UIImage imageNamed:@"IMG_barBTN1"] forState:UIControlStateNormal];
+//    [BTN_refresh addSubview:IMG_btn];
     [BTN_refresh addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     
     
@@ -128,14 +131,11 @@
     }
     if(result.height >= 480)
     {
-        
         [_filter_button.titleLabel setFont: [_filter_button.titleLabel.font fontWithSize: 17]];
     }
     else if(result.height >= 667)
     {
-        
         [_filter_button.titleLabel setFont: [_filter_button.titleLabel.font fontWithSize: 19]];
-        
     }
     [self.navigationItem setLeftBarButtonItems:@[negativeSpacer, anotherButton] animated:NO];
     
@@ -144,6 +144,7 @@
      @{NSForegroundColorAttributeName:[UIColor whiteColor],
        NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Medium" size:22.0f]}];
     self.navigationItem.title = [@"Order List" uppercaseString];
+    
     /*[ _profilebutton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                              [UIFont fontWithName:@"FontAwesome" size:25.0], NSFontAttributeName,
                                              [UIColor whiteColor], NSForegroundColorAttributeName,[UIColor blackColor],NSBackgroundColorAttributeName,
@@ -310,7 +311,7 @@
     NSString *assgned_date_text = [NSString stringWithFormat:@"Assigned Date :"];
     NSString *assigend_date = [NSString stringWithFormat:@"%@",[self formatter_DATE:[dict valueForKey:@"assigned_date"]]];
     assigend_date = [assigend_date stringByReplacingOccurrencesOfString:@"(null)" withString:@"NA"];
-    NSString *delivery_date_text = [NSString stringWithFormat:@"Delivery Date :"];
+//    NSString *delivery_date_text = [NSString stringWithFormat:@"Delivery Date :"];
    // NSString *delivery_date;// = [NSString stringWithFormat:@"%@",[self formatter_DATE:[dict valueForKey:@"assigned_date"]]];
  //   delivery_date = @"NA";//[delivery_date stringByReplacingOccurrencesOfString:@"(null)" withString:];
 
@@ -374,10 +375,12 @@
     
     NSString *STR_customer_address;
     @try {
-        STR_customer_address = [NSString stringWithFormat:@"%@, %@, %@, %@, %@, %@",[Orders valueForKey:@"shipping_address1"],[Orders valueForKey:@"shipping_address2"],[Orders valueForKey:@"shipping_city"],[Orders valueForKey:@"shipping_country"],[Orders valueForKey:@"shipping_state"],[Orders valueForKey:@"shipping_zip_code"]];
+        STR_customer_address = [NSString stringWithFormat:@"%@, %@, %@, %@, %@, %@",[Orders valueForKey:@"shipping_address1"],[Orders valueForKey:@"shipping_address2"],[Orders valueForKey:@"shipping_city"],[Orders valueForKey:@"shipping_state"],[Orders valueForKey:@"shipping_country"],[Orders valueForKey:@"shipping_zip_code"]];
     } @catch (NSException *exception) {
         STR_customer_address = @"";
     }
+    
+    STR_customer_address = [STR_customer_address stringByReplacingOccurrencesOfString:@", ," withString:@", "];
     
     cell.customer_address.text = STR_customer_address;
     
@@ -401,25 +404,33 @@
         STR_delivery_slot = @"Not Mentioned";
     }
     
-    STR_print_delivery = [NSString stringWithFormat:@"Delivery Slot : %@",STR_delivery_slot];
     
-    if ([cell.delivery_slot respondsToSelector:@selector(setAttributedText:)]) {
-        
-        // Define general attributes for the entire text
-        NSDictionary *attribsd = @{
-                                   NSForegroundColorAttributeName:cell.Deliver_date_text.textColor,
-                                   NSFontAttributeName: cell.Deliver_date_text.font
-                                   };
-        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:STR_print_delivery attributes:attribsd];
-        
-        // UIFont *unboldFont = [UIFont fontWithName:@"Roboto-Medium" size:14];
-        NSRange greenTextRange = [STR_print_delivery rangeOfString:STR_delivery_slot];
-        [attributedText setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:0.00 green:0.33 blue:0.62 alpha:1.0],NSFontAttributeName:cell.order_ID.font}range:greenTextRange];
-        cell.delivery_slot.attributedText = attributedText;
+    if ([STR_delivery_slot isEqualToString:@"No Delivery slot Choosen"]) {
+        cell.delivery_slot.text = @" ";
+        cell.delivery_slot.font = [cell.delivery_slot.font fontWithSize:0];
     }
     else
     {
-        cell.delivery_slot.text = STR_print_delivery;
+        STR_print_delivery = [NSString stringWithFormat:@"Delivery Slot : %@",STR_delivery_slot];
+        
+        if ([cell.delivery_slot respondsToSelector:@selector(setAttributedText:)]) {
+            
+            // Define general attributes for the entire text
+            NSDictionary *attribsd = @{
+                                       NSForegroundColorAttributeName:cell.Deliver_date_text.textColor,
+                                       NSFontAttributeName: cell.Deliver_date_text.font
+                                       };
+            NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:STR_print_delivery attributes:attribsd];
+            
+            // UIFont *unboldFont = [UIFont fontWithName:@"Roboto-Medium" size:14];
+            NSRange greenTextRange = [STR_print_delivery rangeOfString:STR_delivery_slot];
+            [attributedText setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:0.00 green:0.33 blue:0.62 alpha:1.0],NSFontAttributeName:cell.order_ID.font}range:greenTextRange];
+            cell.delivery_slot.attributedText = attributedText;
+        }
+        else
+        {
+            cell.delivery_slot.text = STR_print_delivery;
+        }
     }
     
     NSString *STR_order_STAT;
@@ -436,7 +447,8 @@
     if ([STR_order_STAT isEqualToString:@"Pending"]) {
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
         tapGestureRecognizer.numberOfTapsRequired = 1;
-        
+    
+//        cell.LBL_pickUP.font = [cell.LBL_pickUP.font fontWithSize:17];
         [cell.LBL_pickUP addGestureRecognizer:tapGestureRecognizer];
         [cell.LBL_pickUP setTag:indexPath.row];
         cell.LBL_pickUP.userInteractionEnabled = YES;
@@ -445,6 +457,7 @@
     else
     {
         cell.LBL_pickUP.text = @"";
+//        cell.LBL_pickUP.font = [cell.LBL_pickUP.font fontWithSize:0];
     }
     
     cell.order_status.text = [STR_order_STAT uppercaseString];

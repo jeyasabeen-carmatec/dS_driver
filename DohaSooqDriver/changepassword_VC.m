@@ -169,42 +169,57 @@
 }
 -(void)BTN_saveAction
 {
-    if(_TXT_oldpwd.text.length < 8)
+    if(_TXT_oldpwd.text.length == 0 || [_TXT_oldpwd.text isEqualToString:@""])
     {
 //        [_TXT_oldpwd resignFirstResponder];
         _error_label.hidden = NO;
-        self.error_label.text = @"Current password should have minimum 8 charecters";
+        self.error_label.text = @"Please enter old password";
         [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
         
     }
-    else if (![_TXT_oldpwd.text isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"changepassword"]])
+   /* else if (![_TXT_oldpwd.text isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"changepassword"]])
     {
 //        [_TXT_oldpwd resignFirstResponder];
         _error_label.hidden = NO;
         self.error_label.text = @"Please enter the correct current password";
+        [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
+    }*/
+    else  if(_TXT_newpwd.text.length == 0 || [_TXT_newpwd.text isEqualToString:@""])
+    {
+        //        [_TXT_newpwd resignFirstResponder];
+        _error_label.hidden = NO;
+        self.error_label.text = @"Please enter new password";
         [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
     }
     else  if(_TXT_newpwd.text.length < 8)
     {
 //        [_TXT_newpwd resignFirstResponder];
         _error_label.hidden = NO;
-        self.error_label.text = @"Current password should have minimum 8 charecters";
+        self.error_label.text = @"New password should be minimum 8 characters";
         [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
     }
-    else  if(_TXT_confirmpwd.text.length < 8)
+  /*  else  if(_TXT_confirmpwd.text.length < 8)
     {
 //        [_TXT_confirmpwd resignFirstResponder];
         _error_label.hidden = NO;
         self.error_label.text = @"Current password should have minimum 8 charecters";
         [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
+    } */
+    else  if(_TXT_confirmpwd.text.length == 0 || [_TXT_confirmpwd.text isEqualToString:@""])
+    {
+        //        [_TXT_newpwd resignFirstResponder];
+        _error_label.hidden = NO;
+        self.error_label.text = @"Please enter confirm password";
+        [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
     }
+    
     else  if(![_TXT_confirmpwd.text isEqualToString:_TXT_newpwd.text])
     {
 //        [_TXT_oldpwd resignFirstResponder];
 //        [_TXT_newpwd resignFirstResponder];
 //        [_TXT_confirmpwd resignFirstResponder];
         _error_label.hidden = NO;
-        self.error_label.text = @"Current password and new password does not match";
+        self.error_label.text = @"Confirm password and new password does not match";
         [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
     }
     else
@@ -243,7 +258,11 @@
         }
         else
         {
-            self.error_label.text = @"Password should have min 8 charecter including 1 number";
+            _TXT_newpwd.text = nil;
+            _TXT_confirmpwd.text =nil;
+            
+            self.error_label.hidden  = NO;
+            self.error_label.text = @"Password must contain one capital character and one numerical";
             [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
         }
         
@@ -326,12 +345,12 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
             
             [self performSegueWithIdentifier:@"load_home" sender:self];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[[json_DATA valueForKey:@"status"] capitalizedString] message:[[json_DATA valueForKey:@"msg"] capitalizedString] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
             [alert show];
         }
         else
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[[json_DATA valueForKey:@"status"] capitalizedString] message:[[json_DATA valueForKey:@"msg"] capitalizedString] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
             [alert show];
         }
     }
