@@ -23,8 +23,12 @@
 //#define SERVER_IMG @"http://dohasooq.carmatec.com/"
 
 //Staging new
-#define SERVER_URL @"http://test2.dohasooq.com/apis/"
-#define SERVER_IMG @"http://test2.dohasooq.com/"
+//#define SERVER_URL @"http://test2.dohasooq.com/apis/"
+//#define SERVER_IMG @"http://test2.dohasooq.com/"
+
+//Production new
+#define SERVER_URL @"https://www.dohasooq.com/apis/"
+#define SERVER_IMG @"https://www.dohasooq.com/"
 
 //Pilot server
 //#define SERVER_URL @"https://pilot.dohasooq.com/apis/"
