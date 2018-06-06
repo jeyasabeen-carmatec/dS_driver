@@ -183,8 +183,8 @@
 -(void) API_Chanhe_PWD
 {
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
+//    NSError *error;
+//    NSHTTPURLResponse *response = nil;
     //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
     //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
     
@@ -192,41 +192,78 @@
     
     NSLog(@"Post contents %@",post);
     
-    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+//    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
+//    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+//    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@forgotPwdApi",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+//    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:urlProducts];
+//    [request setHTTPMethod:@"POST"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    
+//    [request setHTTPShouldHandleCookies:NO];
+//    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//    if (aData)
+//    {
+//        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+//        NSLog(@"Api response from forgotPwdApi %@",json_DATA);
+//        
+//        @try {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"]  delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil]; //If there is an account associated with %@, you will receive an email with new reset password link
+//            [alert show];
+//        } @catch (NSException *exception) {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+//            [alert show];
+//        }
+//        
+//    }
+//    else
+//    {
+//        NSLog(@"Error %@\nResponse %@",error,response);
+//    }
+//    [Helper_activity Stop_animation:self];
     
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"Api response from forgotPwdApi %@",json_DATA);
+    
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"%@",[error localizedDescription]);
+            }
+            if (data) {
+                 NSLog(@"API Change PAssword ...%@",data);
+                [Helper_activity Stop_animation:self];
+
+                NSMutableDictionary *json_DATA=[NSMutableDictionary dictionaryWithDictionary:data];
+                
+                    @try {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"]  delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil]; //If there is an account associated with %@, you will receive an email with new reset password link
+                        [alert show];
+                    } @catch (NSException *exception) {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                        [alert show];
+                    }
+  
+               
+                
+                
+                
+                
+            }
+            
+        });
         
-        @try {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"]  delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil]; //If there is an account associated with %@, you will receive an email with new reset password link
-            [alert show];
-        } @catch (NSException *exception) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-            [alert show];
-        }
-        
-    }
-    else
-    {
-        NSLog(@"Error %@\nResponse %@",error,response);
-    }
-    [Helper_activity Stop_animation:self];
+    }];
+    
+
+    
+    
+    
 }
 
 @end

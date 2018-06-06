@@ -347,45 +347,93 @@
 */
 
 #pragma mark - API Calling
+/*-(void) API_myprofile
+ {
+ NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+ 
+ NSError *error;
+ NSHTTPURLResponse *response = nil;
+ //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
+ //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
+ 
+ NSString *post = [NSString stringWithFormat:@"driver_id=%@",driver_ID];
+ 
+ NSLog(@"Post contents %@",post);
+ 
+ //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
+ NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+ NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+ 
+ NSString *urlGetuser =[NSString stringWithFormat:@"%@viewProfileApi",SERVER_URL];
+ 
+ NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+ NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+ [request setURL:urlProducts];
+ [request setHTTPMethod:@"POST"];
+ [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+ [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+ [request setHTTPBody:postData];
+ 
+ [request setHTTPShouldHandleCookies:NO];
+ NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ if (aData)
+ {
+ NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+ [self setupview :json_DATA];
+ }
+ else
+ {
+ NSLog(@"Error %@\nResponse %@",error,response);
+ }
+ [Helper_activity Stop_animation:self];
+ }*/
+
+
+
 -(void) API_myprofile
 {
-    NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+    //NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
-    //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
-    //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
-    
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@",driver_ID];
-    
-    NSLog(@"Post contents %@",post);
-    
-    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+  
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@viewProfileApi",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
     
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        [self setupview :json_DATA];
-    }
-    else
-    {
-        NSLog(@"Error %@\nResponse %@",error,response);
-    }
-    [Helper_activity Stop_animation:self];
+    
+    [Helper_activity apiWith_PostString:urlGetuser andParams:nil completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"%@",[error localizedDescription]);
+            }
+            if (data) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"API My profile ...%@",data);
+                NSMutableDictionary *json_DATA = [NSMutableDictionary dictionaryWithDictionary:data];
+                
+                      if ([[NSString stringWithFormat:@"%@",[json_DATA valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+                          
+                             [self setupview :json_DATA];
+                       }
+                      else{
+                          
+//                          [Helper_activity removeSharedPreferenceValues];
+//                          [self performSegueWithIdentifier:@"tohome" sender:self];
+                          NSLog(@"Go to login Page");
+                          UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                          alert.tag = 12;
+                          [alert show];
+
+                          // go to login page..
+                      }
+                
+              
+            }
+            
+        });
+        
+    }];
+    
 }
 
 #pragma mark - Update Segue identifer
@@ -415,11 +463,58 @@
     if (alertView.tag == 12345) {
         NSLog(@"Selected button is %ld",(long)buttonIndex);
         if (buttonIndex == 1) {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"driver_id"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [self performSegueWithIdentifier:@"tohome" sender:self];
+           
+            [self LogOutAPiCalling];
+            
         }
-    }
+     }else if(alertView.tag == 12)
+              {
+                  [Helper_activity removeSharedPreferenceValues];
+                  [self performSegueWithIdentifier:@"tohome" sender:self];
+                  
+                  
+              }
 }
+
+#pragma mark - LogOutAPiCalling
+-(void)LogOutAPiCalling{
+    
+    NSString *URL_STR = [NSString stringWithFormat:@"%@drivers/logout",SERVER_IMG];
+    
+    URL_STR = [URL_STR stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    NSLog(@"URL Sent token Viewcontroller...%@",URL_STR);
+    
+    [Helper_activity apiWith_PostString:URL_STR andParams:nil completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                NSLog(@"%@",[error localizedDescription]);
+            }
+            if (data) {
+                
+                if ([[data valueForKey:@"status"] isEqualToString:@"success"]) {
+                    
+                    NSLog(@"Set Token ...%@",data);
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"driver_id"];
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Aws"];
+                    [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"Cookie"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    
+                    [self performSegueWithIdentifier:@"tohome" sender:self];
+ 
+                }else{
+                    [Helper_activity createaAlertWithMsg:@"Some thing went wrong, Please try again later." andTitle:@""];
+                }
+                
+                
+                
+            }
+            
+        });
+        
+    }];
+}
+
+
+
 
 @end

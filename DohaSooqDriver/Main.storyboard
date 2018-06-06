@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="25S-2u-FJ1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G1314" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="25S-2u-FJ1">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -159,7 +159,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="b67-l8-MQE">
-                                    <rect key="frame" x="0.0" y="434" width="320" height="2"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="2"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
@@ -214,6 +214,7 @@
                         <segue destination="B77-OB-0dD" kind="push" identifier="order_profile" animates="NO" id="tZj-f2-Ebd"/>
                         <segue destination="E7c-kd-avu" kind="push" identifier="order_to_orderDetail" animates="NO" id="hWV-Yg-xl9"/>
                         <segue destination="fMc-fu-L8Q" kind="push" identifier="order_Detail_VC" id="JaD-KX-GoN"/>
+                        <segue destination="BYZ-38-t0r" kind="push" identifier="order_to_login" id="LFB-97-853"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Rv-1v-OVj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -292,6 +293,7 @@
                         <outlet property="total_orders" destination="q89-CC-J3D" id="k6X-b4-rfo"/>
                         <segue destination="ICu-b3-qIx" kind="push" identifier="signature_segue" animates="NO" id="bSm-Ag-686"/>
                         <segue destination="3cf-Rr-WWg" kind="push" identifier="order_list_to_home" id="tsd-Od-U2p"/>
+                        <segue destination="BYZ-38-t0r" kind="push" identifier="orderDetail_to_login" id="vgS-wU-zZn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cjl-Gh-Ef4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -629,7 +631,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <view key="tableFooterView" contentMode="scaleToFill" id="o9m-U8-gRX">
-                                <rect key="frame" x="0.0" y="135" width="320" height="1"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.80607467395653998" green="0.80607467395653998" blue="0.80607467395653998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
@@ -919,7 +921,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="h4X-kf-9YM">
-                                    <rect key="frame" x="0.0" y="270" width="291" height="33"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="291" height="33"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.98823529409999999" green="0.68235294120000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
@@ -1023,7 +1025,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dqF-RK-x5g">
-                                            <rect key="frame" x="0.0" y="288" width="291" height="36"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="291" height="36"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.98823529409999999" green="0.68235294120000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
@@ -1055,6 +1057,7 @@
                         <outlet property="main_view" destination="eam-qx-aka" id="Q12-dk-vi3"/>
                         <outlet property="profiletab" destination="JAU-oE-IPT" id="Jqg-1S-k9x"/>
                         <segue destination="K1P-eE-QN0" kind="push" identifier="edit_profile_to_chnage_pwd" animates="NO" id="kvY-K3-cgq"/>
+                        <segue destination="BYZ-38-t0r" kind="push" id="xM2-C6-xKA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YAr-nS-bEc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1274,8 +1277,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="bE7-DL-oG9"/>
-        <segue reference="kvY-K3-cgq"/>
         <segue reference="tsd-Od-U2p"/>
+        <segue reference="kvY-K3-cgq"/>
+        <segue reference="bE7-DL-oG9"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -303,65 +303,131 @@
 -(void) API_changePWD
 {
     NSString *original_PWD = _TXT_oldpwd.text;
-    NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+    //NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     NSString *Confirm_new_pwd = _TXT_confirmpwd.text;
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
+//    NSError *error;
+//    NSHTTPURLResponse *response = nil;
     //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
 //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
     
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@&old_pwd=%@&new_pwd=%@",driver_ID,original_PWD,Confirm_new_pwd];
+    NSString *post = [NSString stringWithFormat:@"old_pwd=%@&new_pwd=%@",original_PWD,Confirm_new_pwd];
     
     NSLog(@"Post contents %@",post);
     
 //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+//    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+//    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@changePwdApi",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+//    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:urlProducts];
+//    [request setHTTPMethod:@"POST"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    
+//    [request setHTTPShouldHandleCookies:NO];
+//    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//    if (aData)
+//    {
+////        [activityIndicatorView stopAnimating];
+////        VW_overlay.hidden = YES;
+//        
+//        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+//        NSLog(@"The response %@",json_DATA);
+//        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+//            [[NSUserDefaults standardUserDefaults] setValue:_TXT_confirmpwd.text forKey:@"changepassword"];
+//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"password"];
+//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"driver_id"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//            
+//            [self performSegueWithIdentifier:@"load_home" sender:self];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+//            [alert show];
+//        }
+//        else
+//        {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+//            [alert show];
+//        }
+//    }
+//    else
+//    {
+////        [activityIndicatorView stopAnimating];
+////        VW_overlay.hidden = YES;
+//        
+//        NSLog(@"Error %@\nResponse %@",error,response);
+//    }
+//    [Helper_activity Stop_animation:self];
     
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-//        [activityIndicatorView stopAnimating];
-//        VW_overlay.hidden = YES;
-        
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"The response %@",json_DATA);
-        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
-            [[NSUserDefaults standardUserDefaults] setValue:_TXT_confirmpwd.text forKey:@"changepassword"];
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"password"];
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"driver_id"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"%@",[error localizedDescription]);
+            }
+     if (data) {
+                
+                       NSLog(@"Set Token ...%@",data);
+                       [Helper_activity Stop_animation:self];
+                        NSMutableDictionary *json_DATA=[NSMutableDictionary dictionaryWithDictionary:data];
+                
+             if ([[NSString stringWithFormat:@"%@",[json_DATA valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+                    
+                          if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+                                 [[NSUserDefaults standardUserDefaults] setValue:_TXT_confirmpwd.text forKey:@"changepassword"];
+                                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"password"];
+                                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"driver_id"];
+                                 [[NSUserDefaults standardUserDefaults] synchronize];
+                        
+                                 [self performSegueWithIdentifier:@"load_home" sender:self];
+                                  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA   valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                                 [alert show];
+                             }
+                         else
+                            {
+                               UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                                  [alert show];
+                            }
+             }
+              else{
+                  
+                  NSLog(@"Go to login Page");
+                  UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                  alert.tag = 12345;
+                  [alert show];
+                  
+//                   [Helper_activity removeSharedPreferenceValues];
+//                   [self performSegueWithIdentifier:@"load_home" sender:self];
+                       // go to home..
+              }
+                
+                
+    }
             
-            [self performSegueWithIdentifier:@"load_home" sender:self];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-            [alert show];
-        }
-        else
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-            [alert show];
-        }
-    }
-    else
-    {
-//        [activityIndicatorView stopAnimating];
-//        VW_overlay.hidden = YES;
+        });
         
-        NSLog(@"Error %@\nResponse %@",error,response);
+    }];
+    
+}
+
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(alertView.tag == 12345)
+    {
+        [Helper_activity removeSharedPreferenceValues];
+        [self performSegueWithIdentifier:@"load_home" sender:self];
+        
+        
     }
-    [Helper_activity Stop_animation:self];
+    
+    
 }
 
 @end

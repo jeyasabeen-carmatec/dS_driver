@@ -462,47 +462,82 @@
     // Pass the selected object to the new view controller.
 }
 */
+/*-(void) API_orderDetail
+ {
+ NSString *STR_orderid = [[NSUserDefaults standardUserDefaults] valueForKey:@"order_ID"];
+ NSString *STR_driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+ 
+ NSError *error;
+ NSHTTPURLResponse *response = nil;
+ 
+ NSString *post = [NSString stringWithFormat:@"driver_id=%@&order_id=%@",STR_driver_ID,STR_orderid];
+ 
+ NSLog(@"Post contents %@",post);
+ 
+ NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+ NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+ 
+ NSString *urlGetuser =[NSString stringWithFormat:@"%@DriverOrderListApi",SERVER_URL];
+ 
+ NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+ NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+ [request setURL:urlProducts];
+ [request setHTTPMethod:@"POST"];
+ [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+ [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+ [request setHTTPBody:postData];
+ 
+ [request setHTTPShouldHandleCookies:NO];
+ NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ if (aData)
+ {
+ NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+ NSLog(@"Oreder_detail_VC.m Api response 1 DriverOrderDetailApi  %@",json_DATA);
+ 
+ }
+ else
+ {
+ NSLog(@"Error %@\nResponse %@",error,response);
+ }
+ 
+ [Helper_activity Stop_animation:self];
+ 
+ 
+ 
+ 
+ }*/
 
 #pragma mark - API Integration
 -(void) API_orderDetail
 {
     NSString *STR_orderid = [[NSUserDefaults standardUserDefaults] valueForKey:@"order_ID"];
-    NSString *STR_driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
-    
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
-    
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@&order_id=%@",STR_driver_ID,STR_orderid];
+   
+    NSString *post = [NSString stringWithFormat:@"order_id=%@",STR_orderid];
     
     NSLog(@"Post contents %@",post);
     
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
-    
-    NSString *urlGetuser =[NSString stringWithFormat:@"%@DriverOrderListApi",SERVER_URL];
-    
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-    
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"Oreder_detail_VC.m Api response 1 DriverOrderDetailApi  %@",json_DATA);
-        
-    }
-    else
-    {
-        NSLog(@"Error %@\nResponse %@",error,response);
-    }
-    
-    [Helper_activity Stop_animation:self];
-}
 
+    
+   NSString *urlGetuser =[NSString stringWithFormat:@"%@DriverOrderListApi",SERVER_URL];
+
+    
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"%@",[error localizedDescription]);
+            }
+            if (data) {
+                  [Helper_activity Stop_animation:self];
+                NSLog(@"OUT Json Push register %@",data);
+                
+                
+            }
+            
+        });
+        
+    }];
+   
+    
+}
 @end

@@ -568,66 +568,142 @@
     [self performSelector:@selector(API_updatePICKUP) withObject:nil afterDelay:0.01];
 }
 
-
+/*-(void) API_updatePICKUP
+ {
+ NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+ NSDictionary *dict = [orders_arr objectAtIndex:buttonIndexPath.row];
+ //    NSDictionary *Orders = [dict valueForKey:@"Orders"];
+ NSString *STR_orderid = [dict valueForKey:@"id"];
+ 
+ NSError *error;
+ NSHTTPURLResponse *response = nil;
+ 
+ NSString *post = [NSString stringWithFormat:@"driver_id=%@&shipment_id=%@&shipping_status=Dispatched",driver_ID,STR_orderid];
+ 
+ NSLog(@"Post contents %@",post);
+ 
+ NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+ NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+ 
+ NSString *urlGetuser =[NSString stringWithFormat:@"%@updateOrderDispatchedStatus",SERVER_URL];
+ 
+ NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+ NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+ [request setURL:urlProducts];
+ [request setHTTPMethod:@"POST"];
+ [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+ [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+ [request setHTTPBody:postData];
+ 
+ [request setHTTPShouldHandleCookies:NO];
+ NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ if (aData)
+ {
+ [Helper_activity Stop_animation:self];
+ NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+ NSLog(@"Order Update pickup %@",json_DATA);
+ 
+ if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+ orders_arr = [[NSMutableArray alloc]init];
+ NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+ [post_Date setValue:driver_ID forKey:@"driver_id"];
+ [post_Date setValue:@"10" forKey:@"page_limit"];
+ [post_Date setValue:@"1" forKey:@"page_no"];
+ [post_Date setValue:@"" forKey:@"filter_order_number"];
+ [post_Date setValue:@"" forKey:@"filter_shipping_status"];
+ [Helper_activity Start_animation:self];
+ [self performSelector:@selector(API_get_orerList) withObject:nil afterDelay:0.01];
+ }
+ else
+ {
+ UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+ [alert show];
+ }
+ 
+ }
+ else
+ {
+ [Helper_activity Stop_animation:self];
+ UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+ [alert show];
+ }
+ 
+ }
+*/
 -(void) API_updatePICKUP
 {
-    NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     NSDictionary *dict = [orders_arr objectAtIndex:buttonIndexPath.row];
-//    NSDictionary *Orders = [dict valueForKey:@"Orders"];
     NSString *STR_orderid = [dict valueForKey:@"id"];
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
+
     
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@&shipment_id=%@&shipping_status=Dispatched",driver_ID,STR_orderid];
+    NSString *post = [NSString stringWithFormat:@"shipment_id=%@&shipping_status=Dispatched",STR_orderid];
     
     NSLog(@"Post contents %@",post);
     
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@updateOrderDispatchedStatus",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                NSLog(@"%@",[error localizedDescription]);
+                [Helper_activity Stop_animation:self];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                [alert show];
+            }
+            if (data) {
+                  NSLog(@"Update PickUp ... %@",data);
+                 [Helper_activity Stop_animation:self];
+                
+        if ([data isKindOfClass:[NSDictionary class]]) {
+                    
+                    NSMutableDictionary *json_DATA=[NSMutableDictionary dictionaryWithDictionary:data];
+                    
+            if ([[NSString stringWithFormat:@"%@",[json_DATA valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+                        
+                        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+                            
+                            orders_arr = [[NSMutableArray alloc]init];
+                            NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+                            [post_Date setValue:driver_ID forKey:@"driver_id"];
+                            [post_Date setValue:@"10" forKey:@"page_limit"];
+                            [post_Date setValue:@"1" forKey:@"page_no"];
+                            [post_Date setValue:@"" forKey:@"filter_order_number"];
+                            [post_Date setValue:@"" forKey:@"filter_shipping_status"];
+                            [Helper_activity Start_animation:self];
+                            [self performSelector:@selector(API_get_orerList) withObject:nil afterDelay:0.01];
+                        }
+                        else
+                        {
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                            [alert show];
+                        }
+                        
+            }else{
+                
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.tag = 12345;
+                [alert show];
+                
+                        // Go to login Page..
+                }
+                    
+                    
+
+                }
+        else{ // not dictionary...
+                    NSLog(@"Data Could not be read.");
+                }
+                
+                
+            }
+            
+        });
+        
+    }];
     
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-        [Helper_activity Stop_animation:self];
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"Order Update pickup %@",json_DATA);
-        
-        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
-            orders_arr = [[NSMutableArray alloc]init];
-            NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
-            [post_Date setValue:driver_ID forKey:@"driver_id"];
-            [post_Date setValue:@"10" forKey:@"page_limit"];
-            [post_Date setValue:@"1" forKey:@"page_no"];
-            [post_Date setValue:@"" forKey:@"filter_order_number"];
-            [post_Date setValue:@"" forKey:@"filter_shipping_status"];
-            [Helper_activity Start_animation:self];
-            [self performSelector:@selector(API_get_orerList) withObject:nil afterDelay:0.01];
-        }
-        else
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-            [alert show];
-        }
-        
-    }
-    else
-    {
-        [Helper_activity Stop_animation:self];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-        [alert show];
-    }
     
 }
 
@@ -861,65 +937,148 @@
 }
 
 #pragma mark - API Calling
+/*-(void) API_get_orerList
+ {
+ NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+ 
+ NSLog(@"Post contents %@",post_Date);
+ 
+ NSError *error;
+ NSHTTPURLResponse *response = nil;
+ //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
+ 
+ NSString *post = [NSString stringWithFormat:@"driver_id=%@&page_limit=%@&page_no=%@&filter_shipping_status=%@&filter_delivery_date=%@",driver_ID,[post_Date valueForKey:@"page_limit"],[post_Date valueForKey:@"page_no"],[post_Date valueForKey:@"filter_shipping_status"],[post_Date valueForKey:@"filter_order_number"]];
+ 
+ NSLog(@"Post contents %@",post);
+ 
+ //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
+ NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+ NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+ 
+ NSString *urlGetuser =[NSString stringWithFormat:@"%@DriverOrderListApi",SERVER_URL];
+ 
+ NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+ NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+ [request setURL:urlProducts];
+ [request setHTTPMethod:@"POST"];
+ [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+ [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+ [request setHTTPBody:postData];
+ 
+ [request setHTTPShouldHandleCookies:NO];
+ NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ if (aData)
+ {
+ NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+ NSLog(@"Order list %@",json_DATA);
+ ARR_order_list = [json_DATA valueForKey:@"order_list"];
+ 
+ page_count = [[json_DATA valueForKey:@"total_page_cnt"] longValue];
+ 
+ if ([ARR_order_list count] > 0) {
+ //            [anotherButton setEnabled:NO];
+ //            [anotherButton setTintColor: [UIColor clearColor]];
+ 
+ _VW_no_Data.hidden = YES;
+ _Order_TAB.hidden = NO;
+ 
+ [orders_arr addObjectsFromArray:ARR_order_list];
+ [_Order_TAB reloadData];
+ }
+ else
+ {
+ _VW_no_Data.hidden = NO;
+ _Order_TAB.hidden = YES;
+ }
+ }
+ else
+ {
+ NSLog(@"Error %@\nResponse %@",error,response);
+ }
+ [Helper_activity Stop_animation:self];
+ }
+ */
+
+
+
 -(void) API_get_orerList
 {
-    NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     
     NSLog(@"Post contents %@",post_Date);
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
-    //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
     
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@&page_limit=%@&page_no=%@&filter_shipping_status=%@&filter_delivery_date=%@",driver_ID,[post_Date valueForKey:@"page_limit"],[post_Date valueForKey:@"page_no"],[post_Date valueForKey:@"filter_shipping_status"],[post_Date valueForKey:@"filter_order_number"]];
+    NSString *post = [NSString stringWithFormat:@"page_limit=%@&page_no=%@&filter_shipping_status=%@&filter_delivery_date=%@",[post_Date valueForKey:@"page_limit"],[post_Date valueForKey:@"page_no"],[post_Date valueForKey:@"filter_shipping_status"],[post_Date valueForKey:@"filter_order_number"]];
     
     NSLog(@"Post contents %@",post);
     
-    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@DriverOrderListApi",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
     
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"Order list %@",json_DATA);
-        ARR_order_list = [json_DATA valueForKey:@"order_list"];
-        
-        page_count = [[json_DATA valueForKey:@"total_page_cnt"] longValue];
-        
-        if ([ARR_order_list count] > 0) {
-//            [anotherButton setEnabled:NO];
-//            [anotherButton setTintColor: [UIColor clearColor]];
+    
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"%@",[error localizedDescription]);
+            }
+            if (data) {
+                
+                NSLog(@"Get Order List respose ... %@",data);
+                
+                [Helper_activity Stop_animation:self];
+                
+               
+                    
+                    NSMutableDictionary *json_DATA = [NSMutableDictionary dictionaryWithDictionary:data];
+                    
+                if ([[NSString stringWithFormat:@"%@",[json_DATA valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+                        
+                        ARR_order_list = [json_DATA valueForKey:@"order_list"];
+                        
+                        page_count = [[json_DATA valueForKey:@"total_page_cnt"] longValue];
+                        
+                        if ([ARR_order_list count] > 0) {
+                            //            [anotherButton setEnabled:NO];
+                            //            [anotherButton setTintColor: [UIColor clearColor]];
+                            
+                            _VW_no_Data.hidden = YES;
+                            _Order_TAB.hidden = NO;
+                            
+                            [orders_arr addObjectsFromArray:ARR_order_list];
+                            [_Order_TAB reloadData];
+                        }
+                        else
+                        {
+                            _VW_no_Data.hidden = NO;
+                            _Order_TAB.hidden = YES;
+                        }
+ 
+                    }
+                    else{
+                        NSLog(@"Go to login Page");
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                        alert.tag = 12345;
+                        [alert show];
+
+                        
+//                        [Helper_activity removeSharedPreferenceValues];
+//                         [self performSegueWithIdentifier:@"order_to_login" sender:self];
+                        // Go to login Page....
+                    }
+                    
+                
+               
+                
+            }
             
-            _VW_no_Data.hidden = YES;
-            _Order_TAB.hidden = NO;
-            
-            [orders_arr addObjectsFromArray:ARR_order_list];
-            [_Order_TAB reloadData];
-        }
-        else
-        {
-            _VW_no_Data.hidden = NO;
-            _Order_TAB.hidden = YES;
-        }
-    }
-    else
-    {
-        NSLog(@"Error %@\nResponse %@",error,response);
-    }
-    [Helper_activity Stop_animation:self];
+        });
+        
+    }];
+
+    
+    
 }
 
 #pragma mark - Control datasource
@@ -1003,5 +1162,21 @@
     [newFormat setDateFormat:@"MMM dd, yyyy"];
     return [newFormat stringFromDate:currentDate];
 }
+
+#pragma mark AlrtView - Delegate
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(alertView.tag == 12345)
+    {
+            [Helper_activity removeSharedPreferenceValues];
+            [self performSegueWithIdentifier:@"order_to_login" sender:self];
+            
+    
+    }
+    
+    
+}
+
+
 
 @end

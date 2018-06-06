@@ -27,12 +27,20 @@
 //#define SERVER_IMG @"http://test2.dohasooq.com/"
 
 //Production new
-#define SERVER_URL @"https://www.dohasooq.com/apis/"
-#define SERVER_IMG @"https://www.dohasooq.com/"
+//#define SERVER_URL @"https://www.dohasooq.com/apis/"
+//#define SERVER_IMG @"https://www.dohasooq.com/"
+
+//#define SERVERVICE_URL @"https://www.dohasooq.com/apis/"
+//#define SERVERVICE_IMG @"https://www.dohasooq.com/"
 
 //Pilot server
 //#define SERVER_URL @"https://pilot.dohasooq.com/apis/"
 //#define SERVER_IMG @"https://pilot.dohasooq.com/"
+
+//Lijith system
+#define SERVER_URL @"http://192.168.3.108/dohasooq/apis/"
+#define SERVER_IMG @"http://192.168.3.108/dohasooq/"
+
 
 //http://test2.dohasooq.com
 #endif /* Dohasooq_pch */

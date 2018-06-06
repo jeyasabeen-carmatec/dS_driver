@@ -1171,6 +1171,7 @@
 }
 */
 
+
 #pragma mark - API Calling
 -(void) API_get_order_Detail
 {
@@ -1179,12 +1180,12 @@
 //    float SHIPPING_VAL = 0;
     
     NSString *STR_orderid = [[NSUserDefaults standardUserDefaults] valueForKey:@"order_ID"];
-    NSString *STR_driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+    //NSString *STR_driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     
     NSError *error;
     NSHTTPURLResponse *response = nil;
     
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@&shipment_id=%@",STR_driver_ID,STR_orderid];
+    NSString *post = [NSString stringWithFormat:@"shipment_id=%@",STR_orderid];
     
     NSLog(@"Post contents %@",post);
     
@@ -1201,11 +1202,37 @@
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     
-    [request setHTTPShouldHandleCookies:NO];
+    
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isKindOfClass:[NSNull class]] || ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isEqualToString:@"<nil>"] || ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isEqualToString:@"(null)"]) {
+        
+        NSString *awlllb = [[NSUserDefaults standardUserDefaults] valueForKey:@"Aws"];
+        
+        if (![awlllb containsString:@"(null)"]) {
+            awlllb = [NSString stringWithFormat:@"%@;%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"],awlllb];
+            [request addValue:awlllb forHTTPHeaderField:@"Cookie"];
+        }
+        else{
+            [request addValue:[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] forHTTPHeaderField:@"Cookie"];
+            NSLog(@" Cookie::   %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"]);
+        }
+        
+    }
+
+    
+    
+    //[request setHTTPShouldHandleCookies:NO];
     NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if (response) {
+        [Helper_activity filteringCookieValue:response];
+    }
+    
     if (aData)
     {
         json_reponse = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+        
+        if ([[NSString stringWithFormat:@"%@",[json_reponse valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+        
         NSLog(@"Order_Detail_VC.m API response DriverOrderDetailApi %@",json_reponse);
         
         @try {
@@ -1474,6 +1501,19 @@
         } @catch (NSException *exception) {
             NSLog(@"Exception from Add item %@",exception);
         }
+   } // session status if closing
+        else{
+            
+            NSLog(@"Go to login Page");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.tag = 12345;
+            [alert show];
+
+            
+//            [Helper_activity removeSharedPreferenceValues];
+//            [self performSegueWithIdentifier:@"orderDetail_to_login" sender:self];
+            // Go to Login..
+        }
         
     }
     else
@@ -1523,6 +1563,26 @@
     NSString *boundary = @"---------------------------14737809831466499882746641449";
     NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
     [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
+    
+    
+    
+    // set Cookie VAlue as Header when it is not Null.........
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isKindOfClass:[NSNull class]] || ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isEqualToString:@"<nil>"] || ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isEqualToString:@"(null)"] || [[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] != nil) {
+        
+        NSString *awlllb = [[NSUserDefaults standardUserDefaults] valueForKey:@"Aws"];
+        
+        if (![awlllb containsString:@"(null)"]) {
+            awlllb = [NSString stringWithFormat:@"%@;%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"],awlllb];
+            [request addValue:awlllb forHTTPHeaderField:@"Cookie"];
+        }
+        else{
+            [request addValue:[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] forHTTPHeaderField:@"Cookie"];
+            NSLog(@" Cookie::   %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"]);
+        }
+        
+    }
+
+    
     
     
     NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0);
@@ -1575,20 +1635,43 @@
     
     // set request body
     NSError *error;
+    NSHTTPURLResponse *response = nil;
+
 //    NSString *json_DATA = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
     [request setHTTPBody:body];
     
     //return and test
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
     NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     
+    if (response) {
+        [Helper_activity filteringCookieValue:response];
+    }
     
      NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:returnData options:NSASCIIStringEncoding error:&error];
     
     NSLog(@"Posted data %@\nUploaded status %@",json_DATA, returnString);
     
     if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
-        [self performSegueWithIdentifier:@"order_list_to_home" sender:self];
+        
+        if ([[NSString stringWithFormat:@"%@",[json_DATA valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+            [self performSegueWithIdentifier:@"order_list_to_home" sender:self];
+        }
+        else{
+            
+            NSLog(@"Go to login Page");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.tag = 12345;
+            [alert show];
+
+            
+//             [Helper_activity removeSharedPreferenceValues];
+//             [self performSegueWithIdentifier:@"orderDetail_to_login" sender:self];
+            // Go to login page
+        }
+        
+        
+        
     }
 //    order_list_to_home
     
@@ -1876,6 +1959,20 @@
     NSDateFormatter *newFormat = [[NSDateFormatter alloc] init];
     [newFormat setDateFormat:@"MMM dd, yyyy"];
     return [NSString stringWithFormat:@": %@",[newFormat stringFromDate:currentDate]];
+}
+
+#pragma mark AlrtView - Delegate
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(alertView.tag == 12345)
+    {
+        [Helper_activity removeSharedPreferenceValues];
+        [self performSegueWithIdentifier:@"orderDetail_to_login" sender:self];
+        
+        
+    }
+    
+    
 }
 
 @end

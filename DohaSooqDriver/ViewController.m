@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "Helper_activity.h"
 
-@interface ViewController ()<UITextFieldDelegate>
+@interface ViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
 {
     CGRect framerect;
 }
@@ -21,7 +21,58 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+//    _TXT_email.text = @"testemail652902@mailinator.com";
+//    _TXT_password.text = @"Qazplm123";
+    
+    
     [self set_up_VIEW];
+    
+    NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=1369897582"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                               if (!error) {
+                                   NSError* parseError;
+                                   NSDictionary *appMetadataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&parseError];
+                                   NSArray *resultsArray = (appMetadataDictionary)?[appMetadataDictionary objectForKey:@"results"]:nil;
+                                   NSDictionary *resultsDic = [resultsArray firstObject];
+                                   if (resultsDic) {
+                                       // compare version with your apps local version
+                                       NSString *iTunesVersion = [resultsDic objectForKey:@"version"];
+                                       
+                                       NSString *appVersion = @"1.0";
+                                       
+                                       NSLog(@"itunes version = %@\nAppversion = %@",iTunesVersion,appVersion);
+                                       
+                                       //                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New version available" message:[NSString stringWithFormat:@"%@",appMetadataDictionary] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                                       //                                       [alert show];
+                                       //
+                                       //                                       float itnVer = [iTunesVersion floatValue];
+                                       //                                       float apver = [appVersion floatValue];
+                                       //
+                                       //                                       NSLog(@"The val floet itune %f\nThe val float appver%f",itnVer,apver);
+                                       
+                                       if (iTunesVersion && [appVersion compare:iTunesVersion] != NSOrderedSame) {
+                                           
+                                           
+                                           //                                           UIAlertView *alert = [UIAlertView bk_showAlertViewWithTitle:@"Doha Sooq Online Shopping" message:[NSString stringWithFormat:@"New version available. Update required."] cancelButtonTitle:@"update" otherButtonTitles:nil handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                           
+                                           
+                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Version Updated %@",iTunesVersion] message:[resultsDic valueForKey:@"releaseNotes"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Update",@"Cancel", nil];
+                                           alert.tag = 123456;
+                                           [alert show];
+                                           //                                           }];
+                                           //                                           [alert show];
+                                       }
+                                   }
+                               } else {
+                                   // error occurred with http(s) request
+                                   NSLog(@"error occurred communicating with iTunes");
+                               }
+                           }];
+    
 }
 -(void)set_up_VIEW
 {
@@ -210,35 +261,65 @@
 
 -(void) send_TOK
 {
+    
+   
     NSString *token = [[NSUserDefaults standardUserDefaults]valueForKey:@"DEV_TOK"];
     NSString *driver_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     NSLog(@"new token available : %@", token);
-    NSError *error;
+//    NSError *error;
     NSString *URL_STR = [NSString stringWithFormat:@"%@savePushNotificationInfoAPI",SERVER_URL];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    URL_STR = [URL_STR stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    NSLog(@"URL Sent token Viewcontroller...%@",URL_STR);
+    
+    
+   // NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
     NSString *post = [NSString stringWithFormat:@"driver_id=%@&device_type=%@&device_token=%@",driver_id,@"iphone",token];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+   // NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    //NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
-    [request setURL:[NSURL URLWithString:URL_STR]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+//    [request setURL:[NSURL URLWithString:URL_STR]];
+//    [request setHTTPMethod:@"POST"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    
+//    NSLog(@"Datas Posted == %@",post);
+//    
+//    NSURLResponse *response;
+//    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//    
+//    if (aData)
+//    {
+//        NSMutableDictionary *push = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+//        NSLog(@"OUT Json Push register %@",push);
+//        
+//    }
+
     
-    NSLog(@"Datas Posted == %@",post);
     
-    NSURLResponse *response;
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        [Helper_activity apiWith_PostString:URL_STR andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error) {
+                    NSLog(@"%@",[error localizedDescription]);
+                }
+                if (data) {
+                    
+                    NSLog(@"Set Token ...%@",data);
+
+                    
     
-    if (aData)
-    {
-        NSMutableDictionary *push = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"OUT Json Push register %@",push);
-        
-    }
-}
+                }
+    
+            });
+    
+        }];
+    
+    
+    
+    
+   }
 
 #pragma mark - Register Push Notification
 - (void)tokenAvailableNotification:(NSNotification *)notification {
@@ -246,32 +327,147 @@
     NSString *token = [[NSUserDefaults standardUserDefaults]valueForKey:@"DEV_TOK"];
     NSString *driver_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     NSLog(@"new token available : %@", token);
-    NSError *error;
+    //NSError *error;
     NSString *URL_STR = [NSString stringWithFormat:@"%@savePushNotificationInfoAPI",SERVER_URL];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+   // NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
     NSString *post = [NSString stringWithFormat:@"driver_id=%@&device_type=%@&device_token=%@",driver_id,@"iphone",token];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    //NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+   // NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
-    [request setURL:[NSURL URLWithString:URL_STR]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+//    [request setURL:[NSURL URLWithString:URL_STR]];
+//    [request setHTTPMethod:@"POST"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    
+//    NSLog(@"Datas Posted == %@",post);
+//    
+//    NSURLResponse *response;
+//    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//    
+//    if (aData)
+//    {
+//        NSMutableDictionary *push = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+//        NSLog(@"OUT Json Push register %@",push);
+//        
+//    }
     
-    NSLog(@"Datas Posted == %@",post);
     
-    NSURLResponse *response;
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
-    if (aData)
-    {
-        NSMutableDictionary *push = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"OUT Json Push register %@",push);
+    [Helper_activity apiWith_PostString:URL_STR andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                NSLog(@"%@",[error localizedDescription]);
+            }
+            if (data) {
+                
+                NSLog(@"OUT Json Push register %@",data);
+                
+                
+            }
+            
+        });
         
-    }
+    }];
+
+    
+    
 }
+
+
+/*
+ -(void) API_Login
+ {
+ NSString *userEmail = _TXT_email.text;
+ NSString *userPWD = _TXT_password.text;
+ 
+ [self.view endEditing:YES];
+ 
+ NSError *error;
+ NSHTTPURLResponse *response = nil;
+ //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
+ //    NSDictionary *parameters = @{ @"username":userEmail,@"password":userPWD};
+ 
+ NSString *post = [NSString stringWithFormat:@"username=%@&password=%@",userEmail,userPWD];
+ 
+ //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
+ NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+ NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+ 
+ NSString *urlGetuser =[NSString stringWithFormat:@"%@loginApi",SERVER_URL];
+ 
+ NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+ NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+ [request setURL:urlProducts];
+ [request setHTTPMethod:@"POST"];
+ [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+ [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+ [request setHTTPBody:postData];
+ 
+ [request setHTTPShouldHandleCookies:NO];
+ NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ if (aData)
+ {
+ 
+ NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+ NSLog(@"The response %@",json_DATA);
+ 
+ @try
+ {
+ [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"profile_pic"] forKey:@"profile_pic"];
+ [[NSUserDefaults standardUserDefaults] synchronize];
+ } @catch (NSException *exception) {
+ [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"profile_pic"];
+ [[NSUserDefaults standardUserDefaults] synchronize];
+ }
+ 
+ if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+ [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"driver_id"] forKey:@"driver_id"];
+ [[NSUserDefaults standardUserDefaults] synchronize];
+ 
+ UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+ [alert show];
+ 
+ NSString *dev_TOK = [[NSUserDefaults standardUserDefaults]valueForKey:@"DEV_TOK"];
+ if (dev_TOK)
+ {
+ [self send_TOK];
+ }
+ else
+ {
+ [[NSNotificationCenter defaultCenter] addObserver:self
+ selector:@selector(tokenAvailableNotification:)
+ name:@"NEW_TOKEN_AVAILABLE"
+ object:nil];
+ }
+ [self order_details_page];
+ }
+ else
+ {
+ 
+ @try {
+ _error_label.hidden = NO;
+ self.error_label.text = [json_DATA valueForKey:@"msg"];
+ [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
+ } @catch (NSException *exception) {
+ NSLog(@"Exception from error msg %@",exception);
+ }
+ 
+ }
+ }
+ else
+ {
+ 
+ NSLog(@"Error %@\nResponse %@",error,response);
+ }
+ 
+ [Helper_activity Stop_animation:self];
+ }
+ */
+
+
+
 
 -(void) API_Login
 {
@@ -280,85 +476,158 @@
     
     [self.view endEditing:YES];
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
-//    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
-//    NSDictionary *parameters = @{ @"username":userEmail,@"password":userPWD};
+//    NSError *error;
+//    NSHTTPURLResponse *response = nil;
     
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@",userEmail,userPWD];
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&device_type=iOS",userEmail,userPWD];
     
-//    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+//    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+//    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@loginApi",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+//    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:urlProducts];
+//    [request setHTTPMethod:@"POST"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    
+//    [request setHTTPShouldHandleCookies:NO];
+//    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//    if (aData)
+//    {
+//        
+//        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+//        NSLog(@"The response %@",json_DATA);
+//        
+//        @try
+//        {
+//            [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"profile_pic"] forKey:@"profile_pic"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//        } @catch (NSException *exception) {
+//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"profile_pic"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//        }
+//        
+//        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+//            [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"driver_id"] forKey:@"driver_id"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//            
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+//            [alert show];
+//            
+//            NSString *dev_TOK = [[NSUserDefaults standardUserDefaults]valueForKey:@"DEV_TOK"];
+//            if (dev_TOK)
+//            {
+//                [self send_TOK];
+//            }
+//            else
+//            {
+//                [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                         selector:@selector(tokenAvailableNotification:)
+//                                                             name:@"NEW_TOKEN_AVAILABLE"
+//                                                           object:nil];
+//            }
+//            [self order_details_page];
+//        }
+//        else
+//        {
+//
+//            @try {
+//                _error_label.hidden = NO;
+//                self.error_label.text = [json_DATA valueForKey:@"msg"];
+//                [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
+//            } @catch (NSException *exception) {
+//                NSLog(@"Exception from error msg %@",exception);
+//            }
+//            
+//        }
+//    }
+//    else
+//    {
+//
+//        NSLog(@"Error %@\nResponse %@",error,response);
+//    }
+//    
+//    [Helper_activity Stop_animation:self];
     
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-        
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        NSLog(@"The response %@",json_DATA);
-        
-        @try
-        {
-            [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"profile_pic"] forKey:@"profile_pic"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        } @catch (NSException *exception) {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"profile_pic"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-        
-        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
-            [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"driver_id"] forKey:@"driver_id"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-            [alert show];
-            
-            NSString *dev_TOK = [[NSUserDefaults standardUserDefaults]valueForKey:@"DEV_TOK"];
-            if (dev_TOK)
-            {
-                [self send_TOK];
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                NSLog(@"%@",[error localizedDescription]);
+                [Helper_activity Stop_animation:self];
             }
-            else
-            {
-                [[NSNotificationCenter defaultCenter] addObserver:self
-                                                         selector:@selector(tokenAvailableNotification:)
-                                                             name:@"NEW_TOKEN_AVAILABLE"
-                                                           object:nil];
-            }
-            [self order_details_page];
-        }
-        else
-        {
+            if (data) {
+                
+                [Helper_activity Stop_animation:self];
 
-            @try {
-                _error_label.hidden = NO;
-                self.error_label.text = [json_DATA valueForKey:@"msg"];
-                [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
-            } @catch (NSException *exception) {
-                NSLog(@"Exception from error msg %@",exception);
+                NSMutableDictionary *json_DATA = [NSMutableDictionary dictionaryWithDictionary:data];
+                
+                
+                NSLog(@"The response %@",json_DATA);
+                
+                @try
+                {
+                    [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"profile_pic"] forKey:@"profile_pic"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                } @catch (NSException *exception) {
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"profile_pic"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
+                
+                if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+                    
+                    
+                    // Cookie Value
+                    
+                    NSString *cookie = [NSString stringWithFormat:@"CAKEPHP=%@",[json_DATA valueForKey:@"session_id"]];
+                    [[NSUserDefaults standardUserDefaults] setValue: cookie forKey:@"Cookie"];
+                    
+                    // Driver ID
+                    [[NSUserDefaults standardUserDefaults] setValue:[json_DATA valueForKey:@"driver_id"] forKey:@"driver_id"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[json_DATA valueForKey:@"status"] message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                    [alert show];
+                    
+                    NSString *dev_TOK = [[NSUserDefaults standardUserDefaults]valueForKey:@"DEV_TOK"];
+                    if (dev_TOK)
+                    {
+                        [self send_TOK];
+                    }
+                    else
+                    {
+                        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                                 selector:@selector(tokenAvailableNotification:)
+                                                                     name:@"NEW_TOKEN_AVAILABLE"
+                                                                   object:nil];
+                    }
+                    [self order_details_page];
+                }
+                else
+                {
+                    
+                    @try {
+                        _error_label.hidden = NO;
+                        self.error_label.text = [json_DATA valueForKey:@"msg"];
+                        [self performSelector:@selector(hiddenLabel) withObject:nil afterDelay:3];
+                    } @catch (NSException *exception) {
+                        NSLog(@"Exception from error msg %@",exception);
+                    }
+                    
+                }
+
+                
+                
+                
+                
             }
             
-        }
-    }
-    else
-    {
-
-        NSLog(@"Error %@\nResponse %@",error,response);
-    }
-    
-    [Helper_activity Stop_animation:self];
+        });
+        
+    }];
 }
 
 -(void) stop_activity
@@ -375,6 +644,30 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Alertview deligate
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 123456) {
+        switch (buttonIndex) {
+            case 0:
+            {
+                NSString *iTunesLink = [NSString stringWithFormat:@"itms://itunes.apple.com/us/app/apple-store/id1369897582?mt=8"];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+            }
+                break;
+                
+            case 1:
+                
+                NSLog(@"1");
+                break;
+                
+                
+                
+            default:
+                break;
+        }
+    }
+}
 
 @end
