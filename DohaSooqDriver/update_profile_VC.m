@@ -454,75 +454,161 @@ else
 }
 
 #pragma mark - API Calling
+
+/*-(void) API_savePRofile
+ {
+ NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+ 
+ NSError *error;
+ NSHTTPURLResponse *response = nil;
+ //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
+ //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
+ 
+ NSString *post = [NSString stringWithFormat:@"driver_id=%@&vehicle_type=%@&vehicle_licence_number=%@&address=%@&phone=%@&firstname=%@&email=%@",driver_ID,[_data_dict valueForKey:@"vehicle"],[_data_dict valueForKey:@"vehicle_num"],[_data_dict valueForKey:@"location"],[_data_dict valueForKey:@"phone"],[_data_dict valueForKey:@"username"],[_data_dict valueForKey:@"email"]];
+ 
+ NSLog(@"Post contents %@",post);
+ 
+ //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
+ NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+ NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+ 
+ NSString *urlGetuser =[NSString stringWithFormat:@"%@editProfileApi",SERVER_URL];
+ 
+ NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
+ NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+ [request setURL:urlProducts];
+ [request setHTTPMethod:@"POST"];
+ [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+ [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+ [request setHTTPBody:postData];
+ 
+ //[request setHTTPShouldHandleCookies:NO];
+ NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ if (aData)
+ {
+ //        [activityIndicatorView stopAnimating];
+ //        VW_overlay.hidden = YES;
+ 
+ NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
+ 
+ NSLog(@"The json response update profile %@",json_DATA);
+ [self.navigationController popViewControllerAnimated:NO];
+ 
+ @try {
+ if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+ UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+ [alert show];
+ }
+ } @catch (NSException *exception) {
+ UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+ [alert show];
+ }
+ 
+ }
+ else
+ {
+ //        [activityIndicatorView stopAnimating];
+ //        VW_overlay.hidden = YES;
+ 
+ NSLog(@"Error %@\nResponse %@",error,response);
+ }
+ [Helper_activity Stop_animation:self];
+ }
+
+ */
+
+
 -(void) API_savePRofile
 {
-    NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     
-    NSError *error;
-    NSHTTPURLResponse *response = nil;
-    //    NSString *auth_TOK = [[NSUserDefaults standardUserDefaults] valueForKey:@"auth_token"];
-    //    NSDictionary *parameters = @{ @"driver_id":driver_ID,@"old_pwd":original_PWD,@"new_pwd":Confirm_new_pwd};
     
-    NSString *post = [NSString stringWithFormat:@"driver_id=%@&vehicle_type=%@&vehicle_licence_number=%@&address=%@&phone=%@&firstname=%@&email=%@",driver_ID,[_data_dict valueForKey:@"vehicle"],[_data_dict valueForKey:@"vehicle_num"],[_data_dict valueForKey:@"location"],[_data_dict valueForKey:@"phone"],[_data_dict valueForKey:@"username"],[_data_dict valueForKey:@"email"]];
+    NSString *post = [NSString stringWithFormat:@"&vehicle_type=%@&vehicle_licence_number=%@&address=%@&phone=%@&firstname=%@&email=%@",[_data_dict valueForKey:@"vehicle"],[_data_dict valueForKey:@"vehicle_num"],[_data_dict valueForKey:@"location"],[_data_dict valueForKey:@"phone"],[_data_dict valueForKey:@"username"],[_data_dict valueForKey:@"email"]];
     
     NSLog(@"Post contents %@",post);
     
-    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:NSASCIIStringEncoding error:&error];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
     NSString *urlGetuser =[NSString stringWithFormat:@"%@editProfileApi",SERVER_URL];
     
-    NSURL *urlProducts=[NSURL URLWithString:urlGetuser];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:urlProducts];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-    
-    [request setHTTPShouldHandleCookies:NO];
-    NSData *aData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (aData)
-    {
-//        [activityIndicatorView stopAnimating];
-//        VW_overlay.hidden = YES;
-        
-        NSMutableDictionary *json_DATA = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:aData options:NSASCIIStringEncoding error:&error];
-        
-        NSLog(@"The json response update profile %@",json_DATA);
-        [self.navigationController popViewControllerAnimated:NO];
-        
-        @try {
-            if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-                [alert show];
+    [Helper_activity apiWith_PostString:urlGetuser andParams:post completionHandler:^(id  _Nullable data, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [Helper_activity Stop_animation:self];
+                NSLog(@"%@",[error localizedDescription]);
             }
-        } @catch (NSException *exception) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-            [alert show];
-        }
+            if (data) {
+                
+                [Helper_activity Stop_animation:self];
+                NSMutableDictionary *json_DATA = [NSMutableDictionary dictionaryWithDictionary:data];
+                
+            if ([[NSString stringWithFormat:@"%@",[json_DATA valueForKey:@"session_status"]] isEqualToString:@"1"]) {
+                    
+                    NSLog(@"The json response update profile %@",json_DATA);
+                    [self.navigationController popViewControllerAnimated:NO];
+                    
+                    @try {
+                        if ([[json_DATA valueForKey:@"status"]isEqualToString:@"success"]) {
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:[json_DATA valueForKey:@"msg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                            [alert show];
+                        }
+                    } @catch (NSException *exception) {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please retry" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                        [alert show];
+                    }
+            }
+                else{
+                    
+                    
+                    NSLog(@"Go to login Page");
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Session Timeed Out" message:@"In some other device same user logged in. Please login again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.tag = 12345;
+                    [alert show];
+//                     [Helper_activity removeSharedPreferenceValues];
+//                     [self performSegueWithIdentifier:@"updateProfile_to_login" sender:self];
+                    // go to Login page..
+                }
+                
+               
+                
+                
+            }
+            
+        });
         
-    }
-    else
-    {
-//        [activityIndicatorView stopAnimating];
-//        VW_overlay.hidden = YES;
-        
-        NSLog(@"Error %@\nResponse %@",error,response);
-    }
-    [Helper_activity Stop_animation:self];
+    }];
+    
+
+    
+    
+    
 }
 
 
 -(void) API_upload_IMG1
 {
     NSString *urlString = [NSString stringWithFormat:@"%@editProfileImgApi",SERVER_URL];
-    NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
+    //NSString *driver_ID = [[NSUserDefaults standardUserDefaults] valueForKey:@"driver_id"];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init] ;
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
+    
+    // set Cookie VAlue as Header when it is not Null.........
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isKindOfClass:[NSNull class]] || ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isEqualToString:@"<nil>"] || ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] isEqualToString:@"(null)"] || [[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] != nil) {
+        
+        NSString *awlllb = [[NSUserDefaults standardUserDefaults] valueForKey:@"Aws"];
+        
+        if (![awlllb containsString:@"(null)"]) {
+            awlllb = [NSString stringWithFormat:@"%@;%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"],awlllb];
+            [request addValue:awlllb forHTTPHeaderField:@"Cookie"];
+        }
+        else{
+            [request addValue:[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"] forHTTPHeaderField:@"Cookie"];
+            NSLog(@" Cookie::   %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Cookie"]);
+        }
+        
+    }
+    
+    
     
     NSMutableData *body = [NSMutableData data];
     
@@ -539,19 +625,24 @@ else
     [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     
     
-    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"driver_id\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%@",driver_ID] dataUsingEncoding:NSASCIIStringEncoding]];
-    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"driver_id\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"%@",driver_ID] dataUsingEncoding:NSASCIIStringEncoding]];
+//    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];       ......
     
     // close form
     [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     // set request body
     [request setHTTPBody:body];
     
+    NSURLResponse *response;
     //return and test
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
     NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    
+    if (response) {
+        [Helper_activity filteringCookieValue:response];
+    }
     
     NSLog(@"Uploaded status %@", returnString);
 //    [activityIndicatorView stopAnimating];
@@ -616,5 +707,21 @@ else
     [Helper_activity Start_animation:self];
     [self performSelector:@selector(API_savePRofile) withObject:nil afterDelay:0.01];
 }
+
+
+#pragma mark AlrtView - Delegate
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(alertView.tag == 12345)
+    {
+        [Helper_activity removeSharedPreferenceValues];
+        [self performSegueWithIdentifier:@"updateProfile_to_login" sender:self];
+        
+        
+    }
+    
+    
+}
+
 
 @end

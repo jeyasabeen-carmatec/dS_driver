@@ -920,7 +920,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.carmatec.DhohaSooqDriver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "831da20b-c9b2-43c2-bc3e-f17ac4df2915";
+				PROVISIONING_PROFILE = "fc20f6b2-68ab-45c4-8749-c5c2434013b3";
 				PROVISIONING_PROFILE_SPECIFIER = DS_DRIVER_adhoc;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)/SharedPrecompiledHeaders";
 			};
@@ -940,7 +940,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.carmatec.DhohaSooqDriver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "831da20b-c9b2-43c2-bc3e-f17ac4df2915";
+				PROVISIONING_PROFILE = "fc20f6b2-68ab-45c4-8749-c5c2434013b3";
 				PROVISIONING_PROFILE_SPECIFIER = DS_DRIVER_adhoc;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)/SharedPrecompiledHeaders";
 			};

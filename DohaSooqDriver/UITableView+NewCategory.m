@@ -44,7 +44,8 @@
         [self.dragFooterView endLoading:self shouldChangeContentInset:NO];
         if ([self.dragDelegate respondsToSelector:@selector(dragTableLoadMoreCanceled:)])
         {
-            [self.dragDelegate dragTableLoadMoreCanceled:self];
+            
+            [self.dragDelegate performSelector:@selector(dragTableLoadMoreCanceled) withObject:self];
         }
     }
     [self callDelegateDidTriggerRefresh];
@@ -57,7 +58,7 @@
         [self.dragHeaderView endLoading:self shouldUpdateRefreshDate:NO shouldChangeContentInset:NO];
         if ([self.dragDelegate respondsToSelector:@selector(dragTableRefreshCanceled:)])
         {
-            [self.dragDelegate dragTableRefreshCanceled:self];
+            [self.dragDelegate performSelector:@selector(dragTableRefreshCanceled) withObject:self];
         }
     }
     [self callDelegateDidTriggerLoadMode];
@@ -284,7 +285,8 @@
 {
     if ([self.dragDelegate respondsToSelector:@selector(dragTableDidTriggerRefresh:)])
     {
-        [self.dragDelegate dragTableDidTriggerRefresh:self];
+//        [self.dragDelegate dragTableDidTriggerRefresh:self];
+         [self.dragDelegate performSelector:@selector(dragTableDidTriggerRefresh) withObject:self];
     }
 }
 
@@ -292,7 +294,8 @@
 {
     if ([self.dragDelegate respondsToSelector:@selector(dragTableDidTriggerLoadMore:)])
     {
-        [self.dragDelegate dragTableDidTriggerLoadMore:self];
+//        [self.dragDelegate dragTableDidTriggerLoadMore:self];
+         [self.dragDelegate performSelector:@selector(dragTableDidTriggerLoadMore) withObject:self];
     }
 }
 
